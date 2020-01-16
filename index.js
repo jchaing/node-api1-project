@@ -101,12 +101,32 @@ server.delete('/api/users/:id', (req, res) => {
 
 // When the client makes a PUT request to /api/users/:id:
 
-// server.put('/api/users/:id', (req, res) => {
-//   const { id } = req.params;
-//   const changes = req.body;
+server.put('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  const { name, bio } = req.body;
 
-//   db.update(id, changes)
-//     .then(updated => {
-
-//     })
-// })
+  name && bio
+    ? db
+        .update(id, changes)
+        .then(updated => {
+          if (updated) {
+            res.status(200).json({ updated, name, bio });
+          } else {
+            res
+              .status(404)
+              .json({
+                message: 'The user with the specified ID does not exist.'
+              });
+          }
+        })
+        .catch(err => {
+          res.status(500).json({
+            errorMessage: 'The user information could not be modified.',
+            err
+          });
+        })
+    : res
+        .status(400)
+        .json({ errorMessage: 'Please provide name and bio for the user.' });
+});
