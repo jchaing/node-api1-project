@@ -74,3 +74,39 @@ server.post('/api/users', (req, res) => {
         errorMessage: 'Please provide name and bio for the user.'
       });
 });
+
+/***** DELETE ******/
+
+// When the client makes a DELETE request to /api/users/:id:
+
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.remove(id)
+    .then(deleted => {
+      deleted
+        ? res.status(200).json(`${deleted} record deleted`)
+        : res.status(404).json({
+            message: 'The user with the specified ID does not exist.'
+          });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ errorMessage: 'The user could not be removed', err });
+    });
+});
+
+/***** PUT ******/
+
+// When the client makes a PUT request to /api/users/:id:
+
+// server.put('/api/users/:id', (req, res) => {
+//   const { id } = req.params;
+//   const changes = req.body;
+
+//   db.update(id, changes)
+//     .then(updated => {
+
+//     })
+// })
