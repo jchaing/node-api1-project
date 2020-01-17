@@ -1,11 +1,13 @@
 // implement your API here
 const express = require('express');
+const cors = require('cors');
 const db = require('./data/db.js');
 
 const port = 5000;
 
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 server.listen(port, () => {
   console.log(`server listening on port ${port}`);
